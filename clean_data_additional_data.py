@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 from raw_data import *
+=======
+>>>>>>> c6f0ce89a97a086ed8b427e1e9d009ec8c9b9198
 import pandas as pd
 import numpy as np
 import sqlite3
@@ -6,7 +9,10 @@ import sqlite3
 # ============================================================
 # A) Sessionize helper (creates user_id + session_start/end)
 # ============================================================
+<<<<<<< HEAD
 df = df.rename(columns={'network_packet_size': 'data_volume'})
+=======
+>>>>>>> c6f0ce89a97a086ed8b427e1e9d009ec8c9b9198
 def sessionize_sessions_df(
     df: pd.DataFrame,
     n_users: int = 500,
@@ -110,6 +116,7 @@ df_ctx.columns = df_ctx.columns.astype(str).str.strip()
 # -------------------------------
 # 1) Ensure we have user_id + session_start (and session_end)
 # -------------------------------
+<<<<<<< HEAD
 
 need_cols = {"user_id", "session_start"}
 missing = need_cols - set(df_ctx.columns)
@@ -119,14 +126,26 @@ missing = need_cols - set(df_ctx.columns)
 df_ctx = sessionize_sessions_df(df_ctx, n_users=500, seed=42)
 
 df_ctx.columns = df_ctx.columns.astype(str).str.strip()
+=======
+need_cols = {"user_id", "session_start"}
+missing = need_cols - set(df_ctx.columns)
+
+if missing:
+    # Creates user_id + session_start/end based on session_duration
+    df_ctx = sessionize_sessions_df(df_ctx, n_users=500, seed=42)
+    df_ctx.columns = df_ctx.columns.astype(str).str.strip()
+>>>>>>> c6f0ce89a97a086ed8b427e1e9d009ec8c9b9198
 
 # -------------------------------
 # 2) Time axis for rolling windows
 # -------------------------------
+<<<<<<< HEAD
 """print("Columns:", list(df_ctx.columns))
 print("Has user_id:", "user_id" in df_ctx.columns)
 print("Index name:", df_ctx.index.name)"""
 
+=======
+>>>>>>> c6f0ce89a97a086ed8b427e1e9d009ec8c9b9198
 df_ctx["ts"] = pd.to_datetime(df_ctx["session_start"], utc=True)
 
 # Sort for rolling windows
@@ -195,9 +214,12 @@ for col in numeric_cols:
 # -------------------------------
 # 6) Browser flags
 # -------------------------------
+<<<<<<< HEAD
 if "user_id" not in df_ctx.columns:
     df_ctx = sessionize_sessions_df(df_ctx, n_users=500, seed=42)
 
+=======
+>>>>>>> c6f0ce89a97a086ed8b427e1e9d009ec8c9b9198
 if "browser_type" in df_ctx.columns:
     prev_browser = df_ctx.groupby("user_id")["browser_type"].shift(1)
     df_ctx["browser_change_flag"] = (
@@ -266,4 +288,10 @@ if "org_id" in df_ctx.columns:
     cur.execute("CREATE INDEX IF NOT EXISTS idx_sessions_org_time ON sessions(org_id, session_start)")
 
 conn.commit()
+<<<<<<< HEAD
 conn.close()
+=======
+conn.close()
+
+df_ctx.head()
+>>>>>>> c6f0ce89a97a086ed8b427e1e9d009ec8c9b9198
